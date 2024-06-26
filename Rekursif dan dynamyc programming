@@ -1,0 +1,68 @@
+#include <iostream>
+#include <chrono>
+
+using namespace std;
+
+// Fungsi untuk menghitung Fibonacci menggunakan pendekatan iteratif
+int fibonacciIterative(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    int a = 0, b = 1, result = 1;
+    for (int i = 2; i <= n; i++) {
+        result = a + b;
+        a = b;
+        b = result;
+    }
+    return result;
+}
+
+// Fungsi untuk menghitung Fibonacci menggunakan pendekatan dynamic programming
+int fibonacciDynamic(int n) {
+    int memo[n + 1];
+    memo[0] = 0;
+    memo[1] = 1;
+    for (int i = 2; i <= n; i++) {
+        memo[i] = memo[i - 1] + memo[i - 2];
+    }
+    return memo[n];
+}
+
+int main() {
+    char again;
+    do {
+        int n, method;
+        cout << "Enter a positive integer: ";
+        cin >> n;
+
+        cout << "Choose method: 1 for Iterative, 2 for Dynamic Programming: ";
+        cin >> method;
+
+        auto start = chrono::high_resolution_clock::now();
+        int result;
+
+        if (method == 1) {
+            result = fibonacciIterative(n);
+        } else if (method == 2) {
+            result = fibonacciDynamic(n);
+        } else {
+            cout << "Invalid method chosen." << endl;
+            continue;
+        }
+
+        auto end = chrono::high_resolution_clock::now();
+        chrono::duration<double> duration = end - start;
+
+        cout << "Fibonacci of " << n << " is: " << result << endl;
+        if (method == 1) {
+            cout << "Execution time (Iterative): " << duration.count() << " seconds" << endl;
+        } else if (method == 2) {
+            cout << "Execution time (Dynamic Programming): " << duration.count() << " seconds" << endl;
+        }
+
+        cout << "Do you want to calculate another Fibonacci number? (y/n): ";
+        cin >> again;
+    } while (again == 'y' || again == 'Y');
+
+    return 0;
+}
